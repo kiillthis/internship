@@ -1,19 +1,42 @@
-import org.jboss.arquillian.container.test.api.Deployment;
-import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.shrinkwrap.api.ShrinkWrap;
-import org.jboss.shrinkwrap.api.asset.EmptyAsset;
-import org.jboss.shrinkwrap.api.spec.JavaArchive;
-import org.junit.runner.RunWith;
+import org.junit.Assert;
+import org.junit.Test;
 
-import static org.junit.Assert.*;
+import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.Map;
 
-@RunWith(Arquillian.class)
 public class SimpleTaskServiceTest {
-    @Deployment
-    public static JavaArchive createDeployment() {
-        return ShrinkWrap.create(JavaArchive.class)
-                .addClass(SimpleTaskService.class)
-                .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
+
+    @Test
+    public void frequencyTest() {
+        Integer[] array = new Integer[]{1, 1, 2, 2, 2, 3, 4};
+        Map<Integer, Integer> actual = new SimpleTaskService<Integer>().count(array);
+        Map<Integer, Integer> expected = new HashMap<Integer, Integer>();
+
+        expected.put(1, 2);
+        expected.put(2, 3);
+        expected.put(3, 1);
+        expected.put(4, 1);
+
+        Assert.assertEquals(expected, actual);
     }
 
+    @Test
+    public void frequencyFromFile() throws IOException, URISyntaxException {
+        Map<String, Integer> expected = new HashMap<String, Integer>();
+
+        expected.put("привет", 2);
+        expected.put("куку", 2);
+        expected.put("как", 1);
+        expected.put("дела", 1);
+
+        SimpleTaskService<String> service = new SimpleTaskService<>();
+
+        Map<String, Integer> actual = service.countFromFile(new File("/Users/killthis/Documents/Java/war2.txt"));
+
+        Assert.assertEquals(expected, actual);
+
+    }
 }

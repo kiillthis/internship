@@ -1,19 +1,48 @@
-import org.jboss.arquillian.container.test.api.Deployment;
-import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.shrinkwrap.api.ShrinkWrap;
-import org.jboss.shrinkwrap.api.asset.EmptyAsset;
-import org.jboss.shrinkwrap.api.spec.JavaArchive;
-import org.junit.runner.RunWith;
+import org.junit.Assert;
+import org.junit.Test;
 
-import static org.junit.Assert.*;
+import java.util.ArrayList;
 
-@RunWith(Arquillian.class)
+
 public class IteratorTest {
-    @Deployment
-    public static JavaArchive createDeployment() {
-        return ShrinkWrap.create(JavaArchive.class)
-                .addClass(Main.class)
-                .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
+
+    Integer[] array1D = new Integer[]{1, 2, 3, 4, 5};
+
+    Integer[][] array2D = new Integer[][]{
+            {1, 2, 3},
+            {4, 5, 6},
+            {7, 8, 9}
+    };
+
+    @Test
+    public void iterator1D() {
+        String expected = "12345";
+
+        ArrayIterator<Integer> it = new ArrayIteratorImpl<Integer>(array1D);
+
+        String actual = "";
+
+        while (it.hasNext()) {
+            actual = actual + it.next();
+        }
+
+        Assert.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void iterator2D() {
+        String expected = "123456789";
+
+        ArrayIterator2DimensionImpl<Integer> it = new ArrayIterator2DimensionImpl<Integer>(array2D);
+
+        String actual = "";
+
+        while (it.hasNext()) {
+            actual = actual + it.next();
+        }
+
+        Assert.assertEquals(expected, actual);
+
     }
 
 }
