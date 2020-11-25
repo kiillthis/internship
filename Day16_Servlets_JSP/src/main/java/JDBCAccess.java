@@ -1,4 +1,4 @@
-package domain;
+import domain.User;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -11,7 +11,7 @@ public class JDBCAccess {
     private final String SQL_DRIVER = "com.mysql.jdbc.Driver";
 
     private final String SCRIPT_FOR_INSERT = "INSERT INTO user VALUES(?, ?, ?)";
-    private final String GET_ALL = "SELECT * FROM students";
+    private final String GET_ALL = "SELECT * FROM user";
 
     public JDBCAccess() {
         try {
